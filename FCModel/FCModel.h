@@ -105,6 +105,7 @@ typedef NS_ENUM(NSInteger, FCModelSaveResult) {
 - (void)revertUnsavedChangeToFieldName:(NSString *)fieldName;
 - (FCModelSaveResult)delete;
 - (FCModelSaveResult)save;
++ (NSString*)getTableName;
 + (void)saveAll; // Resolved by class: call on FCModel to save all, on a subclass to save just those and their subclasses, etc.
 
 // SELECTs
@@ -252,8 +253,9 @@ typedef NS_ENUM(NSInteger, FCModelSaveResult) {
 //
 // Returns YES if there were no resident FCModel instances.
 //
-+ (BOOL)closeDatabase;
 
++ (BOOL)closeDatabase;
++ (void) setModelClasses:(NSArray*)classesArray;
 // If you try to use FCModel while the database is closed, an error will be logged to the console on any relevant calls.
 // Read/info/SELECT methods will return nil when possible, but these will throw exceptions:
 //  -save
