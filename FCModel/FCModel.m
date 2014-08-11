@@ -30,6 +30,7 @@ static NSString * const FCModelClassKey           = @"class";
 static FCModelDatabaseQueue *g_databaseQueue = NULL;
 static NSDictionary *g_fieldInfo = NULL;
 static NSDictionary *g_primaryKeyFieldName = NULL;
+static NSMutableDictionary *g_classTableName = NULL;
 static NSSet *g_tablesUsingAutoIncrementEmulation = NULL;
 static NSMutableDictionary *g_instances = NULL;
 static dispatch_semaphore_t g_instancesReadLock;
@@ -119,6 +120,15 @@ static inline BOOL checkForOpenDatabaseFatal(BOOL fatal)
     NSArray *instances = classCache ? [classCache.objectEnumerator.allObjects copy] : [NSArray array];
     dispatch_semaphore_signal(g_instancesReadLock);
     return instances;
+}
+
+// Added
++ (void) setModelClasses:(NSArray*)classesArray{
+    if(g_classTableName==nil)
+        g_classTableName=[[NSMutableDictionary alloc]init];
+    for (Class class in classesArray) {
+        [g_classTableName setObject:class forKey:[class getTableName]];
+    }
 }
 
 + (instancetype)instanceWithPrimaryKey:(id)primaryKeyValue { return [self instanceWithPrimaryKey:primaryKeyValue databaseRowValues:nil createIfNonexistent:YES]; }
@@ -795,6 +805,10 @@ static inline BOOL checkForOpenDatabaseFatal(BOOL fatal)
 
 - (NSArray *)changedFieldNames { return self.unsavedChanges.allKeys; }
 
++ (NSString*)getTableName{
+    return NSStringFromClass(self.class);
+}
+
 - (FCModelSaveResult)save
 {
     checkForOpenDatabaseFatal(YES);
@@ -809,7 +823,7 @@ static inline BOOL checkForOpenDatabaseFatal(BOOL fatal)
     NSArray *columnNames;
     NSMutableArray *values;
     
-    NSString *tableName = NSStringFromClass(self.class);
+    NSString *tableName = [[self class ]getTableName];
     NSString *pkName = g_primaryKeyFieldName[self.class];
     id primaryKey = [self encodedValueForFieldName:pkName];
     NSAssert1(primaryKey, @"Cannot update %@ without primary key value", NSStringFromClass(self.class));
@@ -954,12 +968,12 @@ static inline BOOL checkForOpenDatabaseFatal(BOOL fatal)
 {
     if (self == FCModel.class) return query;
     query = [query stringByReplacingOccurrencesOfString:@"$PK" withString:g_primaryKeyFieldName[self]];
-    return [query stringByReplacingOccurrencesOfString:@"$T" withString:NSStringFromClass(self)];
+    return [query stringByReplacingOccurrencesOfString:@"$T" withString:[[self class] getTableName]];
 }
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@#%@: 0x%p>", NSStringFromClass(self.class), self.primaryKey, self];
+    return [NSString stringWithFormat:@"<%@#%@: 0x%p>",[[self class] getTableName], self.primaryKey, self];
 }
 
 - (NSDictionary *)allFields
@@ -1017,7 +1031,7 @@ static inline BOOL checkForOpenDatabaseFatal(BOOL fatal)
        ];
         while ([tablesRS next]) {
             NSString *tableName = [tablesRS stringForColumnIndex:0];
-            Class tableModelClass = NSClassFromString(tableName);
+            Class tableModelClass = g_classTableName[tableName];
             if (! tableModelClass || ! [tableModelClass isSubclassOfClass:self]) continue;
             
             NSString *primaryKeyName = nil;
