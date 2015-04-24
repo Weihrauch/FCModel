@@ -930,17 +930,17 @@ static inline BOOL checkForOpenDatabaseFatal(BOOL fatal)
     self._rowValuesInDatabase = newRowValues;
     existsInDatabase = YES;
     
-    if (update) {
-        [self didUpdate];
-        [self.class postChangeNotification:FCModelWillSendAnyChangeNotification changedFields:changedFields instance:self];
-        [self.class postChangeNotification:FCModelUpdateNotification changedFields:changedFields instance:self];
-        [self.class postChangeNotification:FCModelAnyChangeNotification changedFields:changedFields instance:self];
-    } else {
-        [self didInsert];
-        [self.class postChangeNotification:FCModelWillSendAnyChangeNotification changedFields:changedFields instance:self];
-        [self.class postChangeNotification:FCModelInsertNotification changedFields:changedFields instance:self];
-        [self.class postChangeNotification:FCModelAnyChangeNotification changedFields:changedFields instance:self];
-    }
+//    if (update) {
+//        [self didUpdate];
+//        [self.class postChangeNotification:FCModelWillSendAnyChangeNotification changedFields:changedFields instance:self];
+//        [self.class postChangeNotification:FCModelUpdateNotification changedFields:changedFields instance:self];
+//        [self.class postChangeNotification:FCModelAnyChangeNotification changedFields:changedFields instance:self];
+//    } else {
+//        [self didInsert];
+//        [self.class postChangeNotification:FCModelWillSendAnyChangeNotification changedFields:changedFields instance:self];
+//        [self.class postChangeNotification:FCModelInsertNotification changedFields:changedFields instance:self];
+//        [self.class postChangeNotification:FCModelAnyChangeNotification changedFields:changedFields instance:self];
+//    }
     
     return FCModelSaveSucceeded;
 }

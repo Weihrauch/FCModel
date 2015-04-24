@@ -310,6 +310,9 @@
 					9230D6F817F32EF1000C9C87 = {
 						TestTargetID = A9EEFABE17E4C8EE0066C5EA;
 					};
+					A9EEFABE17E4C8EE0066C5EA = {
+						DevelopmentTeam = 9HZ56Q328K;
+					};
 				};
 			};
 			buildConfigurationList = A9EEFABA17E4C8EE0066C5EA /* Build configuration list for PBXProject "FCModelTest" */;
@@ -537,6 +540,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FCModelTest/FCModelTest-Prefix.pch";
 				INFOPLIST_FILE = "FCModelTest/FCModelTest-Info.plist";
@@ -550,6 +554,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FCModelTest/FCModelTest-Prefix.pch";
 				INFOPLIST_FILE = "FCModelTest/FCModelTest-Info.plist";
